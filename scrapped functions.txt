@@ -1,0 +1,52 @@
+startBoard = findWhite(startBoard)
+white = getAverage(getTile(startBoard, 27))
+black = getAverage(getTile(startBoard, 26))
+
+def tileDifferenceVal(tileN, tileImg):
+    x = (tileN%8) if tileN%8!=0 else 8
+    y = floor((tileN/8)-0.01)+1
+    difference = np.empty((64, 64))
+    tileN = int(tileN)
+    if (x+y)%2 != 0:
+        difference = cv.absdiff(white, cv.GaussianBlur(tileImg,(5, 5), 0), difference)
+    else:
+        difference = cv.absdiff(black, cv.GaussianBlur(tileImg,(5, 5), 0), difference)
+    return np.average(difference).astype(int)
+
+def tileDifferenceImg(tileN, tileImg):
+    x = (tileN%8) if tileN%8!=0 else 8
+    y = floor((tileN/8)-0.01)+1
+    difference = np.empty((64, 64))
+    tileN = int(tileN)
+    if (x+y)%2 != 0:
+        difference = cv.absdiff(white, cv.GaussianBlur(tileImg,(5, 5), 0), difference)
+    else:
+        difference = cv.absdiff(black, cv.GaussianBlur(tileImg,(5, 5), 0), difference)
+    return difference
+
+def findWhite(startBoard): # Find the correct orientation of the startBoard
+    if np.average(startBoard[0:512, 0:256]).astype(int) > np.average(startBoard[0:512, 256:512]).astype(int):
+        return cv.rotate(startBoard, cv.ROTATE_180)
+    else:
+        return startBoard
+
+def getAverage(img): #returns average color as a 64x64 image to be used as a difference mask
+    return np.full((64, 64), np.average(img).astype(np.uint8))
+
+# Castle detection
+        if np.average(img)[0:512, 0:64] > np.average(img)[0:512, 448:512]:
+            # Black caslte
+            if np.average(img)[0:256, 0:64] > np.average(img)[256:512, 0:64]:
+                # Long Castle
+                move = board.find_move(chess.E8, chess.C8)
+            else:
+                # Short Castle
+                move = board.find_move(chess.E8, chess.G8)
+        else:
+            # White Caslte
+            if np.average(img)[0:256, 448:512] > np.average(img)[256:512, 448:512]:
+                # Long Castle
+                move = board.find_move(chess.E1, chess.C1)
+            else:
+                # Short Castle
+                move = board.find_move(chess.E1, chess.G1)
