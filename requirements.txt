@@ -1,0 +1,6 @@
+requests
+chess
+opencv-python
+morse
+pillow
+numpy

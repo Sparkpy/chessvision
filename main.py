@@ -3,13 +3,9 @@ from math import floor
 import numpy as np
 import cv2 as cv
 import table
-import morse
 import chess
 import chess.engine
 import requests
-# import serial
-
-# s = serial.Serial('COM5', 9600, timeout=1)
 
 corners = []
 
@@ -59,8 +55,8 @@ def makeMove(img):
             third = x
     
     print(averages)
-    # Please don't ask, I'm sorry in advance
-    # If the averages of the tiles in castle positions are the top 3 then castle // im too tired for this shit
+    # This is quite janky but works very well.
+    # If the averages of the tiles in castle positions are the top 3 then castle // im too tired for this s***
 
     try:
         try:
@@ -127,7 +123,6 @@ while not board.is_game_over():
     if board.turn == assist:
         bestMove = engine.play(board, chess.engine.Limit(time=2))
         print(bestMove.move)
-        # s.write(morse.toMorse(str(bestMove.move)+"\n").encode())
     cv.waitKey(0)
     
 
